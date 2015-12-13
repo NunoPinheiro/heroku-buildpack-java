@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+install_bower() {
+  #save current dir for later
+  local oldDir="$PWD"
+  cd $CACHE_DIR
+  #check if any node version is installed
+  local nodeDir="`ls | grep node`"
+  if [ -z $nodeDir ]; then
+    echo "Downloading Node"
+    local node_url="https://nodejs.org/dist/v5.2.0/node-v5.2.0-linux-x64.tar.gz"
+    curl --retry 3 --silent -L ${node_url} -o node.tar.gz
+    #unpack and remove tar.gz
+    tar xvfz node.tar.gz
+    rm node.tar.gz
+    #change dir to the directory in which node is installed
+    cd `ls | grep node`/bin
+    ./npm install bower
+    #add node and bower to the path
+  fi
+  cd $oldDir
+
+  #recalculate node dir
+  local nodeBinDir="`ls $CACHE_DIR| grep node`/bin"
+  export PATH="$PATH:$CACHE_DIR/$nodeBinDir"
+  export PATH="$PATH:$CACHE_DIR/$nodeBinDir/node_modules/bower/bin"
+}

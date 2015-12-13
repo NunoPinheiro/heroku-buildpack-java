@@ -48,10 +48,18 @@ else
   unset MAVEN_SETTINGS_OPT
 fi
 
+# install bower
+. $BP_DIR/bin/install_bower
+install_bower
+
+
 # change to build dir to run maven
 cd $BUILD_DIR
 
 export MAVEN_OPTS="-Xmx1024m ${MAVEN_JAVA_OPTS} -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository"
+
+# Install Bower dependencies
+bower install
 
 # build app
 mvnOpts="-B"
